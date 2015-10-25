@@ -81,12 +81,22 @@ fullTrainingSet <- cbind(subjectTrainingSet,labelTrainingSetMerged,trainingSet)
 
 completeSet <- tbl_df(rbind(fullTrainingSet,fullTestSet))
 
+##############################################
+# Select only the mean and standar deviation #
+##############################################
+
 colIndex <- c(1,3,which(grepl("mean\\(\\)|std\\(\\)",colnames(completeSet))))
 
 subSet <- completeSet[,colIndex]
 
+###########################################################################
+# Group get the average of each reading grouped by Subject and Label name #
+###########################################################################
+
 subSet2 <- subSet %>% group_by(Subject,Label.Name) %>% summarise_each(funs(mean))
 
+#################
 # Write subSet2 #
+#################
 
 write.table(subSet2,row.names = FALSE,file = subSetFileName)
